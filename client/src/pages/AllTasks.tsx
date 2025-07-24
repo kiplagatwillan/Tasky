@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Alert, List, ListItem, ListItemText, IconButton, Paper, Checkbox, ListItemIcon } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // For incomplete tasks
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // For completed tasks
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import TaskFormDialog from '../components/TaskFormDialog'; // Import the new dialog component
 
 // Define a type for your task object, matching your Prisma schema
 interface Task {
@@ -23,6 +24,8 @@ const AllTasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [openEditDialog, setOpenEditDialog] = useState<boolean>(false); // State for dialog visibility
+  const [currentTask, setCurrentTask] = useState<Task | null>(null); // State to hold task being edited
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -50,9 +53,9 @@ const AllTasks: React.FC = () => {
     if (token) {
       fetchTasks();
     }
-  }, [token]); // Re-fetch tasks if token changes (e.g., after login)
+  }, [token]);
 
-  // --- Handlers for Task Actions (to be implemented in detail later) ---
+  // --- Handlers for Task Actions ---
 
   const handleToggleComplete = async (taskId: string, currentStatus: boolean) => {
     try {
@@ -62,8 +65,7 @@ const AllTasks: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      // After successful update, re-fetch tasks to update the list
-      fetchTasks();
+      fetchTasks(); // Re-fetch tasks to update the list
     } catch (err) {
       console.error('Failed to toggle task status:', err);
       setError('Failed to update task status.');
@@ -78,8 +80,7 @@ const AllTasks: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        // After successful delete, re-fetch tasks
-        fetchTasks();
+        fetchTasks(); // Re-fetch tasks
       } catch (err) {
         console.error('Failed to delete task:', err);
         setError('Failed to move task to trash.');
@@ -87,9 +88,42 @@ const AllTasks: React.FC = () => {
     }
   };
 
-  const handleEdit = (taskId: string) => {
-    // TODO: Implement navigation to an edit page or open a dialog
-    console.log(`Edit task with ID: ${taskId}`);
+  // NEW: Handler to open the edit dialog
+  const handleEdit = (task: Task) => {
+    setCurrentTask(task); // Set the task to be edited
+    setOpenEditDialog(true); // Open the dialog
+  };
+
+  // NEW: Handler to close the edit dialog
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+    setCurrentTask(null); // Clear current task when dialog closes
+  };
+
+  // NEW: Handler to save the edited task
+  const handleSaveEditedTask = async (taskId: string | null, title: string, description: string) => {
+    if (!taskId) {
+        // This should not happen if currentTask is properly set for editing
+        setError('Error: Task ID not found for editing.');
+        return;
+    }
+    try {
+      await axios.patch(
+        `${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`,
+        { title, description },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      fetchTasks(); // Re-fetch tasks to update the list with changes
+      handleCloseEditDialog(); // Close dialog after successful save
+    } catch (err: any) {
+      console.error('Failed to update task:', err);
+      // Let the TaskFormDialog handle displaying this specific error
+      throw err; // Re-throw so TaskFormDialog's catch can handle it
+    }
   };
 
   return (
@@ -114,7 +148,7 @@ const AllTasks: React.FC = () => {
               <ListItem
                 secondaryAction={
                   <Box>
-                    <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(task.id)} sx={{ mr: 1 }}>
+                    <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(task)} sx={{ mr: 1 }}> {/* Pass the whole task object */}
                       <EditIcon />
                     </IconButton>
                     <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(task.id)}>
@@ -146,6 +180,14 @@ const AllTasks: React.FC = () => {
           ))}
         </List>
       )}
+
+      {/* NEW: TaskFormDialog Component */}
+      <TaskFormDialog
+        open={openEditDialog}
+        onClose={handleCloseEditDialog}
+        onSave={handleSaveEditedTask}
+        currentTask={currentTask} // Pass the task being edited
+      />
     </Box>
   );
 };
