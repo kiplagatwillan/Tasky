@@ -4,16 +4,16 @@ import App from "./App.tsx";
 // import './index.css';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { AuthProvider } from "./context/AuthContext.tsx"; // Import AuthProvider
+import { AuthProvider } from "./context/AuthContext.tsx"; 
 
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#4CAF50", // A nice green color
+      main: "#4CAF50", 
     },
     secondary: {
-      main: "#FFC107", // A warm yellow
+      main: "#FFC107", 
     },
   },
   typography: {

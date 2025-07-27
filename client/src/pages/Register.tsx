@@ -10,7 +10,7 @@ const Register: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // NEW: State for confirm password
+  const [confirmPassword, setConfirmPassword] = useState(''); 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,11 +20,11 @@ const Register: React.FC = () => {
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(null); // Clear previous errors
-    setSuccess(null); // Clear previous success messages
+    setError(null); 
+    setSuccess(null); 
     setLoading(true);
 
-    // NEW: Client-side validation for password match
+    
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       setLoading(false);
@@ -41,13 +41,13 @@ const Register: React.FC = () => {
       });
       setSuccess(response.data.message);
 
-      // Automatically log in the user after successful registration
+      
       const loginResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-        email, // Use the registered email for auto-login
+        email, 
         password,
       });
-      login(loginResponse.data.token, loginResponse.data.user); // Store token and user data in context
-      navigate('/tasks'); // Redirect to tasks page
+      login(loginResponse.data.token, loginResponse.data.user); 
+      navigate('/tasks'); 
     } catch (err: any) {
       console.error('Registration error:', err);
       if (err.response && err.response.data && err.response.data.message) {
@@ -129,7 +129,7 @@ const Register: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
           />
-          {/* NEW: Confirm Password Field */}
+          
           <TextField
             margin="normal"
             required
@@ -142,7 +142,7 @@ const Register: React.FC = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={loading}
-            error={password !== confirmPassword && confirmPassword !== ''} // Visual error if mismatch
+            error={password !== confirmPassword && confirmPassword !== ''} 
             helperText={password !== confirmPassword && confirmPassword !== '' ? 'Passwords do not match' : ''}
           />
 
