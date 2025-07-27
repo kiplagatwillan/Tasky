@@ -1,17 +1,18 @@
-import { Router } from 'express';
-import { prisma } from '../index';
-import { protect } from '../middleware/authMiddleware';
-import { Prisma } from '@prisma/client';
+import { Router } from "express";
+import { prisma } from "../index";
+import { protect } from "../middleware/authMiddleware";
+import { Prisma } from "@prisma/client";
 
 const router = Router();
 
-// Endpoint to create a new task
-router.post('/', protect, async (req, res) => {
+router.post("/", protect, async (req, res) => {
   const { title, description } = req.body;
-  const userId = req.userId; // Retrieved from protect middleware
+  const userId = req.userId;
 
   if (!title || !description) {
-    return res.status(400).json({ message: 'Title and description are required.' });
+    return res
+      .status(400)
+      .json({ message: "Title and description are required." });
   }
 
   try {
@@ -19,7 +20,7 @@ router.post('/', protect, async (req, res) => {
       data: {
         title,
         description,
-        userId: userId!, // userId is guaranteed by protect middleware
+        userId: userId!,
       },
       select: {
         id: true,
@@ -29,35 +30,34 @@ router.post('/', protect, async (req, res) => {
         isDeleted: true,
         dateCreated: true,
         dateUpdated: true,
-      }
+      },
     });
-    res.status(201).json({ message: 'Task created successfully!', task: newTask });
+    res
+      .status(201)
+      .json({ message: "Task created successfully!", task: newTask });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to get all tasks for the logged-in user
-// Supports filtering for active, completed, or trashed tasks
-router.get('/', protect, async (req, res) => {
+router.get("/", protect, async (req, res) => {
   const userId = req.userId;
-  const { status } = req.query; // 'active', 'completed', 'trash'
+  const { status } = req.query;
 
   let whereClause: Prisma.TaskWhereInput = {
     userId: userId,
   };
 
-  if (status === 'active') {
+  if (status === "active") {
     whereClause.isCompleted = false;
     whereClause.isDeleted = false;
-  } else if (status === 'completed') {
+  } else if (status === "completed") {
     whereClause.isCompleted = true;
     whereClause.isDeleted = false;
-  } else if (status === 'trash') {
+  } else if (status === "trash") {
     whereClause.isDeleted = true;
   } else {
-    // Default: return active tasks if no status or invalid status is provided
     whereClause.isCompleted = false;
     whereClause.isDeleted = false;
   }
@@ -65,23 +65,22 @@ router.get('/', protect, async (req, res) => {
   try {
     const tasks = await prisma.task.findMany({
       where: whereClause,
-      orderBy: { dateCreated: 'desc' }, // Order by creation date, newest first
+      orderBy: { dateCreated: "desc" },
     });
     res.status(200).json(tasks);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to get a specific task by ID for the logged-in user
-router.get('/:id', protect, async (req, res) => {
+router.get("/:id", protect, async (req, res) => {
   const { id } = req.params;
   const userId = req.userId;
 
   try {
     const task = await prisma.task.findUnique({
-      where: { id, userId }, // Ensure the task belongs to the user
+      where: { id, userId },
       select: {
         id: true,
         title: true,
@@ -90,45 +89,51 @@ router.get('/:id', protect, async (req, res) => {
         isDeleted: true,
         dateCreated: true,
         dateUpdated: true,
-      }
+      },
     });
 
     if (!task) {
-      return res.status(404).json({ message: 'Task not found or does not belong to user.' });
+      return res
+        .status(404)
+        .json({ message: "Task not found or does not belong to user." });
     }
     res.status(200).json(task);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to update a task (title and description)
-router.patch('/:id', protect, async (req, res) => {
+router.patch("/:id", protect, async (req, res) => {
   const { id } = req.params;
   const userId = req.userId;
   const { title, description } = req.body;
 
   if (!title && !description) {
-    return res.status(400).json({ message: 'At least title or description must be provided for update.' });
+    return res
+      .status(400)
+      .json({
+        message: "At least title or description must be provided for update.",
+      });
   }
 
   try {
-    // First, verify the task belongs to the user
     const existingTask = await prisma.task.findUnique({
       where: { id, userId },
     });
 
     if (!existingTask) {
-      return res.status(404).json({ message: 'Task not found or does not belong to user.' });
+      return res
+        .status(404)
+        .json({ message: "Task not found or does not belong to user." });
     }
 
     const updatedTask = await prisma.task.update({
       where: { id },
       data: {
-        title: title || existingTask.title, // Only update if provided
-        description: description || existingTask.description, // Only update if provided
-        dateUpdated: new Date(), // Manually update this as well or rely on @updatedAt
+        title: title || existingTask.title,
+        description: description || existingTask.description,
+        dateUpdated: new Date(),
       },
       select: {
         id: true,
@@ -138,157 +143,174 @@ router.patch('/:id', protect, async (req, res) => {
         isDeleted: true,
         dateCreated: true,
         dateUpdated: true,
-      }
+      },
     });
-    res.status(200).json({ message: 'Task updated successfully!', task: updatedTask });
+    res
+      .status(200)
+      .json({ message: "Task updated successfully!", task: updatedTask });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to mark a task as deleted (soft delete)
-router.delete('/:id', protect, async (req, res) => {
+router.delete("/:id", protect, async (req, res) => {
   const { id } = req.params;
   const userId = req.userId;
 
   try {
-    // First, verify the task belongs to the user
     const existingTask = await prisma.task.findUnique({
       where: { id, userId },
     });
 
     if (!existingTask) {
-      return res.status(404).json({ message: 'Task not found or does not belong to user.' });
+      return res
+        .status(404)
+        .json({ message: "Task not found or does not belong to user." });
     }
 
     await prisma.task.update({
       where: { id },
       data: { isDeleted: true },
     });
-    res.status(200).json({ message: 'Task moved to trash successfully!' });
+    res.status(200).json({ message: "Task moved to trash successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to restore a deleted task
-router.patch('/restore/:id', protect, async (req, res) => {
+router.patch("/restore/:id", protect, async (req, res) => {
   const { id } = req.params;
   const userId = req.userId;
 
   try {
-    // Verify task belongs to user and is actually deleted
     const existingTask = await prisma.task.findUnique({
-      where: { id, userId, isDeleted: true }, // IMPORTANT: Ensure it's in trash
+      where: { id, userId, isDeleted: true },
     });
 
     if (!existingTask) {
-      // This will return 404 if not found or not in trash
-      return res.status(404).json({ message: 'Task not found in trash or does not belong to user.' });
+      return res
+        .status(404)
+        .json({
+          message: "Task not found in trash or does not belong to user.",
+        });
     }
 
     await prisma.task.update({
       where: { id },
-      data: { isDeleted: false, isCompleted: false }, // Restore means it's not deleted and not completed
+      data: { isDeleted: false, isCompleted: false },
     });
-    res.status(200).json({ message: 'Task restored successfully!' });
+    res.status(200).json({ message: "Task restored successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to mark a task as completed
-router.patch('/complete/:id', protect, async (req, res) => {
+router.patch("/complete/:id", protect, async (req, res) => {
   const { id } = req.params;
   const userId = req.userId;
 
   try {
-    // Verify task belongs to user and is not already completed
     const existingTask = await prisma.task.findUnique({
       where: { id, userId, isCompleted: false },
     });
 
     if (!existingTask) {
-      return res.status(404).json({ message: 'Task not found, already completed, or does not belong to user.' });
+      return res
+        .status(404)
+        .json({
+          message:
+            "Task not found, already completed, or does not belong to user.",
+        });
     }
 
     await prisma.task.update({
       where: { id },
       data: { isCompleted: true },
     });
-    res.status(200).json({ message: 'Task marked as complete!' });
+    res.status(200).json({ message: "Task marked as complete!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Endpoint to mark a task as incomplete
-router.patch('/incomplete/:id', protect, async (req, res) => {
+router.patch("/incomplete/:id", protect, async (req, res) => {
   const { id } = req.params;
   const userId = req.userId;
 
   try {
-    // Verify task belongs to user and is not already incomplete
     const existingTask = await prisma.task.findUnique({
       where: { id, userId, isCompleted: true },
     });
 
     if (!existingTask) {
-      return res.status(404).json({ message: 'Task not found, already incomplete, or does not belong to user.' });
+      return res
+        .status(404)
+        .json({
+          message:
+            "Task not found, already incomplete, or does not belong to user.",
+        });
     }
 
     await prisma.task.update({
       where: { id },
       data: { isCompleted: false },
     });
-    res.status(200).json({ message: 'Task marked as incomplete!' });
+    res.status(200).json({ message: "Task marked as incomplete!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// NEW: Endpoint to permanently delete a task
-router.delete('/hard-delete/:id', protect, async (req, res) => {
-    const { id } = req.params;
-    const userId = req.userId; // From protect middleware
+router.delete("/hard-delete/:id", protect, async (req, res) => {
+  const { id } = req.params;
+  const userId = req.userId; // From protect middleware
 
-    if (!userId) {
-        return res.status(401).json({ message: 'User not authenticated.' });
+  if (!userId) {
+    return res.status(401).json({ message: "User not authenticated." });
+  }
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id },
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found." });
     }
 
-    try {
-        // Verify that the task belongs to the user and is currently soft-deleted
-        const task = await prisma.task.findUnique({
-            where: { id },
-        });
-
-        if (!task) {
-            return res.status(404).json({ message: 'Task not found.' });
-        }
-
-        if (task.userId !== userId) {
-            return res.status(403).json({ message: 'Not authorized to delete this task.' });
-        }
-
-        if (!task.isDeleted) {
-            // Task must be in trash to be permanently deleted via this endpoint
-            return res.status(400).json({ message: 'Task is not in trash and cannot be permanently deleted.' });
-        }
-
-        await prisma.task.delete({
-            where: { id },
-        });
-
-        res.status(200).json({ message: 'Task permanently deleted successfully.' });
-    } catch (error) {
-        console.error('Error permanently deleting task:', error);
-        res.status(500).json({ message: 'Failed to permanently delete task.', error: error instanceof Error ? error.message : String(error) });
+    if (task.userId !== userId) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this task." });
     }
+
+    if (!task.isDeleted) {
+      return res
+        .status(400)
+        .json({
+          message: "Task is not in trash and cannot be permanently deleted.",
+        });
+    }
+
+    await prisma.task.delete({
+      where: { id },
+    });
+
+    res.status(200).json({ message: "Task permanently deleted successfully." });
+  } catch (error) {
+    console.error("Error permanently deleting task:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to permanently delete task.",
+        error: error instanceof Error ? error.message : String(error),
+      });
+  }
 });
 
 export default router;

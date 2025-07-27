@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,8 +6,8 @@ import {
   DialogActions,
   TextField,
   Button,
-  Alert
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 
 // Define the Task type to ensure consistency
 interface Task {
@@ -23,13 +23,22 @@ interface Task {
 interface TaskFormDialogProps {
   open: boolean;
   onClose: () => void;
-  onSave: (taskId: string | null, title: string, description: string) => Promise<void>;
+  onSave: (
+    taskId: string | null,
+    title: string,
+    description: string,
+  ) => Promise<void>;
   currentTask: Task | null; // Null for new task, Task object for editing
 }
 
-const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, currentTask }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
+  open,
+  onClose,
+  onSave,
+  currentTask,
+}) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -40,8 +49,8 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, 
       setDescription(currentTask.description);
     } else {
       // Clear form for new task (though we are using this for edit primarily for now)
-      setTitle('');
-      setDescription('');
+      setTitle("");
+      setDescription("");
     }
     setError(null); // Clear errors on dialog open/task change
     setIsSaving(false);
@@ -50,7 +59,7 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, 
   const handleLocalSave = async () => {
     setError(null);
     if (!title.trim()) {
-      setError('Task title cannot be empty.');
+      setError("Task title cannot be empty.");
       return;
     }
     setIsSaving(true);
@@ -61,8 +70,8 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, 
       // Error will be handled by the parent component's onSave,
       // but we can also display a general error here if onSave doesn't throw
       // specific displayable error or needs immediate feedback
-      setError('Failed to save task. Please try again.');
-      console.error('Error saving task in dialog:', err);
+      setError("Failed to save task. Please try again.");
+      console.error("Error saving task in dialog:", err);
     } finally {
       setIsSaving(false);
     }
@@ -70,9 +79,13 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, 
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{currentTask ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+      <DialogTitle>{currentTask ? "Edit Task" : "Create New Task"}</DialogTitle>
       <DialogContent>
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         <TextField
           autoFocus
           margin="dense"
@@ -85,8 +98,10 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, 
           onChange={(e) => setTitle(e.target.value)}
           sx={{ mb: 2 }}
           required
-          error={!!error && title.trim() === ''}
-          helperText={!!error && title.trim() === '' ? 'Task title is required.' : ''}
+          error={!!error && title.trim() === ""}
+          helperText={
+            !!error && title.trim() === "" ? "Task title is required." : ""
+          }
         />
         <TextField
           margin="dense"
@@ -102,9 +117,16 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, onSave, 
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={isSaving}>Cancel</Button>
-        <Button onClick={handleLocalSave} disabled={isSaving} variant="contained" color="primary">
-          {isSaving ? 'Saving...' : 'Save'}
+        <Button onClick={onClose} disabled={isSaving}>
+          Cancel
+        </Button>
+        <Button
+          onClick={handleLocalSave}
+          disabled={isSaving}
+          variant="contained"
+          color="primary"
+        >
+          {isSaving ? "Saving..." : "Save"}
         </Button>
       </DialogActions>
     </Dialog>

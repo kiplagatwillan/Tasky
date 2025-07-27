@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Container, Paper, Alert } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Container,
+  Paper,
+  Alert,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const NewTask: React.FC = () => {
   const { token } = useAuth();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -19,7 +27,7 @@ const NewTask: React.FC = () => {
 
     // Basic client-side validation
     if (!title.trim()) {
-      setError('Task title cannot be empty.');
+      setError("Task title cannot be empty.");
       return;
     }
 
@@ -31,34 +39,47 @@ const NewTask: React.FC = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
-      setSuccess('Task created successfully!');
-      setTitle(''); // Clear form
-      setDescription(''); // Clear form
+      setSuccess("Task created successfully!");
+      setTitle(""); // Clear form
+      setDescription(""); // Clear form
 
       // Optionally, redirect to the tasks list after a short delay
       setTimeout(() => {
-        navigate('/tasks');
+        navigate("/tasks");
       }, 1500);
-
     } catch (err: any) {
-      console.error('Failed to create task:', err);
+      console.error("Failed to create task:", err);
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError('Failed to create task. Please try again.');
+        setError("Failed to create task. Please try again.");
       }
     }
   };
 
   return (
     <Container component="main" maxWidth="sm">
-      <Paper elevation={3} sx={{ mt: 4, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper
+        elevation={3}
+        sx={{
+          mt: 4,
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Create New Task
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1, width: "100%" }}
+        >
           <TextField
             margin="normal"
             required
@@ -69,8 +90,10 @@ const NewTask: React.FC = () => {
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            error={!!error && title.trim() === ''} // Show error if title is empty
-            helperText={!!error && title.trim() === '' ? 'Task title is required.' : ''}
+            error={!!error && title.trim() === ""} // Show error if title is empty
+            helperText={
+              !!error && title.trim() === "" ? "Task title is required." : ""
+            }
           />
           <TextField
             margin="normal"
@@ -85,12 +108,12 @@ const NewTask: React.FC = () => {
           />
 
           {error && (
-            <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+            <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
               {error}
             </Alert>
           )}
           {success && (
-            <Alert severity="success" sx={{ mt: 2, width: '100%' }}>
+            <Alert severity="success" sx={{ mt: 2, width: "100%" }}>
               {success}
             </Alert>
           )}

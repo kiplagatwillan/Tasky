@@ -1,91 +1,152 @@
-import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Link, Container, Paper } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext'; // We'll create this next
+import React from "react";
+import { Box, Typography, Button, Container } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { keyframes } from "@emotion/react"; // For keyframes directly in Emotion
 
-const Login: React.FC = () => {
-  const [emailOrUsername, setEmailOrUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const { login } = useAuth(); // Get the login function from AuthContext
+// Define a subtle fade-in animation for text/buttons
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setError(null); // Clear previous errors
+// Define a subtle background zoom/pan animation
+const backgroundZoomPan = keyframes`
+  0% {
+    background-size: 100%;
+    background-position: center center;
+  }
+  50% {
+    background-size: 105%; /* Subtle zoom in */
+    background-position: center center;
+  }
+  100% {
+    background-size: 100%;
+    background-position: center center;
+  }
+`;
 
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-        emailOrUsername,
-        password,
-      });
-
-      const { token, user } = response.data;
-      login(token, user); // Use the login function from AuthContext
-      navigate('/tasks'); // Redirect to tasks page after successful login
-      
-    } catch (err: any) {
-      console.error('Login error:', err);
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError('Login failed. Please try again.');
-      }
-    }
-  };
-
+const Landing: React.FC = () => {
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-          Login to TaskY
+    <Box
+      sx={{
+        minHeight: "calc(100vh - 64px)", // Full viewport height minus AppBar height (approx 64px)
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        px: 3, // Padding on left/right
+
+        // --- Background Image Styling ---
+        backgroundImage: "url(/images/background-image.jpg)", // Path to your image in public/images
+        backgroundSize: "cover", // Cover the entire container
+        backgroundPosition: "center center", // Center the image
+        backgroundRepeat: "no-repeat", // Do not repeat the image
+        animation: `${backgroundZoomPan} 20s ease-in-out infinite alternate`, // Apply the animation
+
+        // --- Overlay for readability ---
+        position: "relative", // Needed for absolute positioning of overlay
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(255, 255, 255, 0.7)", // White overlay with 70% opacity
+          zIndex: 1, // Place overlay above background image but below content
+        },
+      }}
+    >
+      <Container maxWidth="md" sx={{ zIndex: 2, position: "relative" }}>
+        {" "}
+        {/* Content above overlay */}
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          sx={{
+            fontWeight: 700,
+            color: "primary.main", // Using theme's primary color
+            mb: 2,
+            animation: `${fadeIn} 1s ease-out 0.2s forwards`, // Staggered animation
+            opacity: 0, // Start invisible
+          }}
+        >
+          Organize Your Life with TaskY
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="emailOrUsername"
-            label="Email or Username"
-            name="emailOrUsername"
-            autoComplete="email or username"
-            autoFocus
-            value={emailOrUsername}
-            onChange={(e) => setEmailOrUsername(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {error && (
-            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-              {error}
-            </Typography>
-          )}
+        <Typography
+          variant="h5"
+          component="p"
+          paragraph
+          sx={{
+            color: "text.secondary",
+            mb: 4,
+            animation: `${fadeIn} 1s ease-out 0.4s forwards`, // Staggered animation
+            opacity: 0, // Start invisible
+          }}
+        >
+          TaskY helps you easily and efficiently manage all your tasks, from
+          daily to-dos to long-term projects. Stay productive and focused with a
+          simple, intuitive interface.
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2, // Space between buttons
+            flexDirection: { xs: "column", sm: "row" }, // Stack on small screens, row on larger
+            justifyContent: "center",
+            animation: `${fadeIn} 10s ease-out 0.6s forwards`, // Staggered animation
+            opacity: 0, // Start invisible
+          }}
+        >
           <Button
-            type="submit"
-            fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            size="large"
+            component={RouterLink}
+            to="/register"
+            sx={{
+              px: 4,
+              py: 1.5,
+              borderRadius: "8px",
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.1)",
+            }}
           >
-            LOGIN
+            Get Started For Free
           </Button>
-          <Link href="/register" variant="body2">
-            Don't have an account? Sign Up
-          </Link>
+          <Button
+            variant="outlined"
+            size="large"
+            component={RouterLink}
+            to="/login"
+            sx={{
+              px: 4,
+              py: 1.5,
+              borderRadius: "8px",
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              borderColor: "primary.main",
+              color: "primary.main",
+              "&:hover": {
+                backgroundColor: "primary.light",
+                color: "#FFF", // Change text color on hover
+              },
+            }}
+          >
+            Login to Your Account
+          </Button>
         </Box>
-      </Paper>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 
-export default Login;
+export default Landing;

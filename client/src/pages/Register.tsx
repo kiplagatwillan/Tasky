@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Link, Container, Paper } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Link,
+  Container,
+  Paper,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register: React.FC = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -19,33 +27,44 @@ const Register: React.FC = () => {
     setSuccess(null); // Clear previous success messages
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
-        firstName,
-        lastName,
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
+        {
+          firstName,
+          lastName,
+          username,
+          email,
+          password,
+        },
+      );
 
       setSuccess(response.data.message); // "User registered successfully. Please log in."
       // Optionally, delay navigation to let user read success message
       setTimeout(() => {
-        navigate('/login');
+        navigate("/login");
       }, 2000);
-      
     } catch (err: any) {
-      console.error('Registration error:', err);
+      console.error("Registration error:", err);
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError('Registration failed. Please try again.');
+        setError("Registration failed. Please try again.");
       }
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper
+        elevation={3}
+        sx={{
+          mt: 8,
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Sign Up for TaskY
         </Typography>

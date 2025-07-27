@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
 // import './index.css';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { AuthProvider } from './context/AuthContext.tsx'; // Import AuthProvider
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { AuthProvider } from "./context/AuthContext.tsx"; // Import AuthProvider
 
 // Define a custom theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#4CAF50', // A nice green color
+      main: "#4CAF50", // A nice green color
     },
     secondary: {
-      main: '#FFC107', // A warm yellow
+      main: "#FFC107", // A warm yellow
     },
   },
   typography: {
@@ -22,15 +22,17 @@ const theme = createTheme({
     },
     h5: {
       fontWeight: 600,
-    }
-  }
+    },
+  },
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider> {/* Wrap App with AuthProvider */}
+      <AuthProvider>
+        {" "}
+        {/* Wrap App with AuthProvider */}
         <App />
       </AuthProvider>
     </ThemeProvider>

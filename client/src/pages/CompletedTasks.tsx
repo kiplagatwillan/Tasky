@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, CircularProgress, Alert, List, ListItem, ListItemText, IconButton, Paper, Checkbox, ListItemIcon } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import EditIcon from '@mui/icons-material/Edit'; // Still show edit for completed tasks, if desired
-import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
-import TaskFormDialog from '../components/TaskFormDialog'; // Reusing for edit
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Alert,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Paper,
+  Checkbox,
+  ListItemIcon,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import EditIcon from "@mui/icons-material/Edit";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import TaskFormDialog from "../components/TaskFormDialog";
 
-// Re-use the Task interface
 interface Task {
   id: string;
   title: string;
@@ -31,19 +42,21 @@ const CompletedTasks: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Fetch tasks that are completed and NOT deleted
-      const response = await axios.get<Task[]>(`${import.meta.env.VITE_API_BASE_URL}/tasks?status=completed`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get<Task[]>(
+        `${import.meta.env.VITE_API_BASE_URL}/tasks?status=completed`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       setTasks(response.data);
     } catch (err: any) {
-      console.error('Failed to fetch completed tasks:', err);
+      console.error("Failed to fetch completed tasks:", err);
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError('Failed to load completed tasks. Please try again.');
+        setError("Failed to load completed tasks. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -56,40 +69,47 @@ const CompletedTasks: React.FC = () => {
     }
   }, [token]);
 
-  // --- Handlers for Task Actions (specific to Completed Tasks) ---
-
   const handleToggleComplete = async (taskId: string) => {
     try {
-      // For completed tasks, we only need to mark them as incomplete
-      await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/tasks/incomplete/${taskId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.patch(
+        `${import.meta.env.VITE_API_BASE_URL}/tasks/incomplete/${taskId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
-      fetchCompletedTasks(); // Re-fetch tasks to update the list
+      );
+      fetchCompletedTasks();
     } catch (err) {
-      console.error('Failed to mark task as incomplete:', err);
-      setError('Failed to update task status.');
+      console.error("Failed to mark task as incomplete:", err);
+      setError("Failed to update task status.");
     }
   };
 
   const handleDelete = async (taskId: string) => {
-    if (window.confirm('Are you sure you want to move this completed task to trash?')) {
+    if (
+      window.confirm(
+        "Are you sure you want to move this completed task to trash?",
+      )
+    ) {
       try {
-        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        await axios.delete(
+          `${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
-        fetchCompletedTasks(); // Re-fetch tasks
+        );
+        fetchCompletedTasks();
       } catch (err) {
-        console.error('Failed to delete task:', err);
-        setError('Failed to move task to trash.');
+        console.error("Failed to delete task:", err);
+        setError("Failed to move task to trash.");
       }
     }
   };
 
-  // Re-using edit dialog functions from AllTasks
   const handleEdit = (task: Task) => {
     setCurrentTask(task);
     setOpenEditDialog(true);
@@ -100,10 +120,14 @@ const CompletedTasks: React.FC = () => {
     setCurrentTask(null);
   };
 
-  const handleSaveEditedTask = async (taskId: string | null, title: string, description: string) => {
+  const handleSaveEditedTask = async (
+    taskId: string | null,
+    title: string,
+    description: string,
+  ) => {
     if (!taskId) {
-        setError('Error: Task ID not found for editing.');
-        return;
+      setError("Error: Task ID not found for editing.");
+      return;
     }
     try {
       await axios.patch(
@@ -113,13 +137,13 @@ const CompletedTasks: React.FC = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
-      fetchCompletedTasks(); // Re-fetch tasks to update the list
+      fetchCompletedTasks();
       handleCloseEditDialog();
     } catch (err: any) {
-      console.error('Failed to update task:', err);
-      throw err; // Re-throw so TaskFormDialog's catch can handle it
+      console.error("Failed to update task:", err);
+      throw err;
     }
   };
 
@@ -129,45 +153,76 @@ const CompletedTasks: React.FC = () => {
         Completed Tasks
       </Typography>
 
-      {loading && <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>}
-      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+      {loading && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      )}
+      {error && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       {!loading && !error && tasks.length === 0 && (
-        <Typography variant="h6" color="text.secondary" sx={{ mt: 4, textAlign: 'center' }}>
+        <Typography
+          variant="h6"
+          color="text.secondary"
+          sx={{ mt: 4, textAlign: "center" }}
+        >
           No completed tasks found.
         </Typography>
       )}
 
       {!loading && !error && tasks.length > 0 && (
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        <List sx={{ width: "100%", bgcolor: "background.paper" }}>
           {tasks.map((task) => (
             <Paper key={task.id} elevation={1} sx={{ mb: 2, p: 2 }}>
               <ListItem
                 secondaryAction={
                   <Box>
-                    <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(task)} sx={{ mr: 1 }}>
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => handleEdit(task)}
+                      sx={{ mr: 1 }}
+                    >
                       <EditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(task.id)}>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => handleDelete(task.id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Box>
                 }
               >
                 <ListItemIcon>
-                    {/* For completed tasks, the checkbox means "mark as incomplete" */}
-                    <Checkbox
-                        icon={<CheckCircleIcon color="primary" />} // Already checked visually
-                        checkedIcon={<CheckCircleOutlineIcon color="disabled" />} // Icon when unchecked
-                        checked={task.isCompleted} // Should always be true here
-                        onChange={() => handleToggleComplete(task.id)}
-                        edge="start"
-                    />
+                  <Checkbox
+                    icon={<CheckCircleIcon color="primary" />}
+                    checkedIcon={<CheckCircleOutlineIcon color="disabled" />}
+                    checked={task.isCompleted}
+                    onChange={() => handleToggleComplete(task.id)}
+                    edge="start"
+                  />
                 </ListItemIcon>
                 <ListItemText
-                  primary={<Typography variant="h6" sx={{ textDecoration: 'line-through' }}>{task.title}</Typography>}
+                  primary={
+                    <Typography
+                      variant="h6"
+                      sx={{ textDecoration: "line-through" }}
+                    >
+                      {task.title}
+                    </Typography>
+                  }
                   secondary={
-                    <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ textDecoration: "line-through" }}
+                    >
                       {task.description}
                     </Typography>
                   }
