@@ -6,7 +6,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AuthProvider } from "./context/AuthContext.tsx"; // Import AuthProvider
 
-// Define a custom theme
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <CssBaseline />
       <AuthProvider>
         {" "}
-        {/* Wrap App with AuthProvider */}
+        
         <App />
       </AuthProvider>
     </ThemeProvider>

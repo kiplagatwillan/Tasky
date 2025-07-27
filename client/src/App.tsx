@@ -23,21 +23,21 @@ import NewTask from "./pages/NewTask";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile"; // Assuming you have a Profile page now
+import Profile from "./pages/Profile"; 
 
-// Define a custom theme for a whitish/light feel
+
 const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#4CAF50", // A nice green for primary actions
+      main: "#4CAF50", 
     },
     secondary: {
-      main: "#FFA000", // A warm orange for secondary actions
+      main: "#FFA000", 
     },
     background: {
-      default: "#F5F5F5", // Off-white for general background
-      paper: "#FFFFFF", // Pure white for cards/components
+      default: "#F5F5F5", 
+      paper: "#FFFFFF", 
     },
     text: {
       primary: "#333333",
@@ -45,7 +45,7 @@ const lightTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Roboto, sans-serif", // Material-UI default, good for readability
+    fontFamily: "Roboto, sans-serif", 
     h4: {
       fontWeight: 600,
       color: "#333333",
@@ -59,7 +59,7 @@ const lightTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "none", // Keep button text natural casing
+          textTransform: "none", 
           borderRadius: "8px",
         },
       },
@@ -67,16 +67,16 @@ const lightTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#FFFFFF", // White app bar
-          color: "#333333", // Dark text on app bar
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)", // Subtle shadow
+          backgroundColor: "#FFFFFF", 
+          color: "#333333", 
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)", 
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: "12px", // Slightly rounded corners for cards
+          borderRadius: "12px", 
           padding: "16px",
         },
       },
@@ -89,10 +89,10 @@ const AppContent: React.FC = () => {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <CssBaseline /> {/* Resets CSS for consistent styling */}
+      <CssBaseline /> 
       <AppBar position="static">
         <Toolbar>
-          {/* Logo (top left) */}
+          
           <Typography
             variant="h6"
             component={RouterLink}
@@ -108,7 +108,7 @@ const AppContent: React.FC = () => {
           </Typography>
 
           {user ? (
-            // Links for Logged-in Users
+            
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Button
                 color="inherit"
@@ -164,7 +164,7 @@ const AppContent: React.FC = () => {
               </Button>
             </Box>
           ) : (
-            // Links for Non-Logged-in Users (on the right)
+            
             <Box>
               <Button
                 color="inherit"
@@ -190,10 +190,10 @@ const AppContent: React.FC = () => {
           )}
         </Toolbar>
       </AppBar>
-      {/* Main Content Area */}
+      
       <Box sx={{ mt: 2, p: 2 }}>
         {" "}
-        {/* Added some top margin and padding for content below AppBar */}
+        
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -203,7 +203,7 @@ const AppContent: React.FC = () => {
           <Route path="/completed-tasks" element={<CompletedTasks />} />
           <Route path="/trash" element={<Trash />} />
           <Route path="/profile" element={<Profile />} />{" "}
-          {/* Make sure Profile page exists */}
+          
         </Routes>
       </Box>
     </ThemeProvider>

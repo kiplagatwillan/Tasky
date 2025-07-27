@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { keyframes } from "@emotion/react"; // For keyframes directly in Emotion
+import { keyframes } from "@emotion/react"; 
 
-// Define a subtle fade-in animation for text/buttons
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -15,7 +15,7 @@ const fadeIn = keyframes`
   }
 `;
 
-// Define a subtle background zoom/pan animation
+
 const backgroundZoomPan = keyframes`
   0% {
     background-size: 100%;
@@ -35,23 +35,23 @@ const Landing: React.FC = () => {
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 64px)", // Full viewport height minus AppBar height (approx 64px)
+        minHeight: "calc(100vh - 64px)", 
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
-        px: 3, // Padding on left/right
+        px: 3, 
 
-        // --- Background Image Styling ---
-        backgroundImage: "url(/images/background-image.jpg)", // Path to your image in public/images
-        backgroundSize: "cover", // Cover the entire container
-        backgroundPosition: "center center", // Center the image
-        backgroundRepeat: "no-repeat", // Do not repeat the image
-        animation: `${backgroundZoomPan} 20s ease-in-out infinite alternate`, // Apply the animation
+        
+        backgroundImage: "url(/images/background-image.jpg)", 
+        backgroundSize: "cover", 
+        backgroundPosition: "center center",
+        backgroundRepeat: "no-repeat",
+        animation: `${backgroundZoomPan} 20s ease-in-out infinite alternate`, 
 
-        // --- Overlay for readability ---
-        position: "relative", // Needed for absolute positioning of overlay
+        
+        position: "relative", 
         "&::before": {
           content: '""',
           position: "absolute",
@@ -59,24 +59,24 @@ const Landing: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "rgba(255, 255, 255, 0.7)", // White overlay with 70% opacity
-          zIndex: 1, // Place overlay above background image but below content
+          backgroundColor: "rgba(255, 255, 255, 0.7)", 
+          zIndex: 1, 
         },
       }}
     >
       <Container maxWidth="md" sx={{ zIndex: 2, position: "relative" }}>
         {" "}
-        {/* Content above overlay */}
+      
         <Typography
           variant="h3"
           component="h1"
           gutterBottom
           sx={{
             fontWeight: 700,
-            color: "primary.main", // Using theme's primary color
+            color: "primary.main", 
             mb: 2,
-            animation: `${fadeIn} 1s ease-out 0.2s forwards`, // Staggered animation
-            opacity: 0, // Start invisible
+            animation: `${fadeIn} 1s ease-out 0.2s forwards`, 
+            opacity: 0,
           }}
         >
           Organize Your Life with TaskY
@@ -88,8 +88,8 @@ const Landing: React.FC = () => {
           sx={{
             color: "text.secondary",
             mb: 4,
-            animation: `${fadeIn} 1s ease-out 0.4s forwards`, // Staggered animation
-            opacity: 0, // Start invisible
+            animation: `${fadeIn} 1s ease-out 0.4s forwards`, 
+            opacity: 0, 
           }}
         >
           TaskY helps you easily and efficiently manage all your tasks, from
@@ -99,11 +99,11 @@ const Landing: React.FC = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2, // Space between buttons
-            flexDirection: { xs: "column", sm: "row" }, // Stack on small screens, row on larger
+            gap: 2, 
+            flexDirection: { xs: "column", sm: "row" }, 
             justifyContent: "center",
-            animation: `${fadeIn} 10s ease-out 0.6s forwards`, // Staggered animation
-            opacity: 0, // Start invisible
+            animation: `${fadeIn} 10s ease-out 0.6s forwards`, 
+            opacity: 0, 
           }}
         >
           <Button
@@ -137,7 +137,7 @@ const Landing: React.FC = () => {
               color: "primary.main",
               "&:hover": {
                 backgroundColor: "primary.light",
-                color: "#FFF", // Change text color on hover
+                color: "#FFF", 
               },
             }}
           >

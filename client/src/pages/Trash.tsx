@@ -10,12 +10,12 @@ import {
   IconButton,
   Paper,
 } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"; // For permanent delete
-import RestoreIcon from "@mui/icons-material/Restore"; // For restoring from trash
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever"; 
+import RestoreIcon from "@mui/icons-material/Restore"; 
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 
-// Re-use the Task interface
+
 interface Task {
   id: string;
   title: string;
@@ -36,11 +36,11 @@ const Trash: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Fetch tasks that are deleted
+      
       const response = await axios.get<Task[]>(
         `${import.meta.env.VITE_API_BASE_URL}/tasks?status=trash`,
         {
-          // Corrected status query
+          
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,8 +65,7 @@ const Trash: React.FC = () => {
     }
   }, [token]);
 
-  // --- Handlers for Trash Task Actions ---
-
+  
   const handleRestore = async (taskId: string) => {
     if (
       window.confirm(
@@ -74,18 +73,18 @@ const Trash: React.FC = () => {
       )
     ) {
       try {
-        // CORRECTED: Call the dedicated restore endpoint
+        
         await axios.patch(
           `${import.meta.env.VITE_API_BASE_URL}/tasks/restore/${taskId}`,
           {},
           {
-            // Send empty body as backend expects id in params
+            
             headers: {
               Authorization: `Bearer ${token}`,
             },
           },
         );
-        fetchTrashedTasks(); // Re-fetch tasks to update the list
+        fetchTrashedTasks(); 
       } catch (err) {
         console.error("Failed to restore task:", err);
         const axiosError = err as any;
@@ -94,7 +93,7 @@ const Trash: React.FC = () => {
           axiosError.response.data &&
           axiosError.response.data.message
         ) {
-          setError(axiosError.response.data.message); // Display backend error message
+          setError(axiosError.response.data.message); 
         } else {
           setError("Failed to restore task from trash.");
         }
@@ -109,7 +108,7 @@ const Trash: React.FC = () => {
       )
     ) {
       try {
-        // CORRECTED: Call the dedicated hard-delete endpoint
+        
         await axios.delete(
           `${import.meta.env.VITE_API_BASE_URL}/tasks/hard-delete/${taskId}`,
           {
@@ -118,7 +117,7 @@ const Trash: React.FC = () => {
             },
           },
         );
-        fetchTrashedTasks(); // Re-fetch tasks to update the list
+        fetchTrashedTasks(); 
       } catch (err) {
         console.error("Failed to permanently delete task:", err);
         const axiosError = err as any;
@@ -127,7 +126,7 @@ const Trash: React.FC = () => {
           axiosError.response.data &&
           axiosError.response.data.message
         ) {
-          setError(axiosError.response.data.message); // Display backend error message
+          setError(axiosError.response.data.message); 
         } else {
           setError("Failed to permanently delete task.");
         }
@@ -183,7 +182,7 @@ const Trash: React.FC = () => {
                       onClick={() => handlePermanentlyDelete(task.id)}
                     >
                       <DeleteForeverIcon color="error" />{" "}
-                      {/* Red icon for permanent delete */}
+                      
                     </IconButton>
                   </Box>
                 }

@@ -25,7 +25,7 @@ const NewTask: React.FC = () => {
     setError(null);
     setSuccess(null);
 
-    // Basic client-side validation
+    
     if (!title.trim()) {
       setError("Task title cannot be empty.");
       return;
@@ -42,10 +42,10 @@ const NewTask: React.FC = () => {
         },
       );
       setSuccess("Task created successfully!");
-      setTitle(""); // Clear form
-      setDescription(""); // Clear form
+      setTitle(""); 
+      setDescription(""); 
 
-      // Optionally, redirect to the tasks list after a short delay
+      
       setTimeout(() => {
         navigate("/tasks");
       }, 1500);
@@ -90,7 +90,7 @@ const NewTask: React.FC = () => {
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            error={!!error && title.trim() === ""} // Show error if title is empty
+            error={!!error && title.trim() === ""} 
             helperText={
               !!error && title.trim() === "" ? "Task title is required." : ""
             }

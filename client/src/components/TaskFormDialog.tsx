@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 
-// Define the Task type to ensure consistency
+
 interface Task {
   id: string;
   title: string;
@@ -28,7 +28,7 @@ interface TaskFormDialogProps {
     title: string,
     description: string,
   ) => Promise<void>;
-  currentTask: Task | null; // Null for new task, Task object for editing
+  currentTask: Task | null; 
 }
 
 const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
@@ -42,17 +42,18 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // When currentTask changes (i.e., when dialog opens for editing), populate the form
+  
+
   useEffect(() => {
     if (currentTask) {
       setTitle(currentTask.title);
       setDescription(currentTask.description);
     } else {
-      // Clear form for new task (though we are using this for edit primarily for now)
+      
       setTitle("");
       setDescription("");
     }
-    setError(null); // Clear errors on dialog open/task change
+    setError(null); 
     setIsSaving(false);
   }, [currentTask, open]);
 
@@ -65,11 +66,9 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
     setIsSaving(true);
     try {
       await onSave(currentTask ? currentTask.id : null, title, description);
-      onClose(); // Close dialog on successful save
+      onClose(); 
     } catch (err: any) {
-      // Error will be handled by the parent component's onSave,
-      // but we can also display a general error here if onSave doesn't throw
-      // specific displayable error or needs immediate feedback
+      
       setError("Failed to save task. Please try again.");
       console.error("Error saving task in dialog:", err);
     } finally {

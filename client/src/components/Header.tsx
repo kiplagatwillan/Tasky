@@ -26,7 +26,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/"); // Redirect to landing page after logout
+    navigate("/"); 
   };
 
   return (
@@ -37,7 +37,7 @@ const Header: React.FC = () => {
       sx={{ borderBottom: "1px solid #e0e0e0", mb: 4 }}
     >
       <Toolbar sx={{ justifyContent: "space-between", py: 2 }}>
-        {/* Left Section: Logo/Title */}
+        
         <Typography
           variant="h5"
           sx={{ fontWeight: "bold", color: "primary.main", cursor: "pointer" }}
@@ -46,11 +46,11 @@ const Header: React.FC = () => {
           TASKY
         </Typography>
 
-        {/* Right Section: Conditional Rendering */}
+        
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {isAuthenticated ? (
             <>
-              {/* Logged-in Navigation Links */}
+              
               <Button
                 component={Link}
                 to="/tasks"
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
                 Trash
               </Button>
 
-              {/* Welcome Message and Avatar/Profile Link */}
+              
               <Typography
                 variant="body1"
                 sx={{ mr: 2, color: "text.secondary" }}
@@ -111,7 +111,7 @@ const Header: React.FC = () => {
                 </Avatar>
               </Button>
 
-              {/* Logout Button */}
+              
               <Button
                 variant="outlined"
                 color="primary"
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
               </Button>
             </>
           ) : (
-            // Logged-out Buttons
+            
             <>
               <Button
                 variant="outlined"

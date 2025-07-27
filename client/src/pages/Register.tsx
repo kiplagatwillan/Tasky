@@ -1,74 +1,72 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Link,
-  Container,
-  Paper,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Button, Container, Paper, Alert, CircularProgress } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const Register: React.FC = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // NEW: State for confirm password
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null); // Clear previous errors
     setSuccess(null); // Clear previous success messages
+    setLoading(true);
+
+    // NEW: Client-side validation for password match
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
-        {
-          firstName,
-          lastName,
-          username,
-          email,
-          password,
-        },
-      );
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
+        firstName,
+        lastName,
+        username,
+        email,
+        password,
+      });
+      setSuccess(response.data.message);
 
-      setSuccess(response.data.message); // "User registered successfully. Please log in."
-      // Optionally, delay navigation to let user read success message
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      // Automatically log in the user after successful registration
+      const loginResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+        email, // Use the registered email for auto-login
+        password,
+      });
+      login(loginResponse.data.token, loginResponse.data.user); // Store token and user data in context
+      navigate('/tasks'); // Redirect to tasks page
     } catch (err: any) {
-      console.error("Registration error:", err);
+      console.error('Registration error:', err);
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError("Registration failed. Please try again.");
+        setError('Registration failed. Please try again.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={3}
-        sx={{
-          mt: 8,
-          p: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-          Sign Up for TaskY
+      <Paper elevation={3} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography component="h1" variant="h5">
+          Sign Up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleRegister} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -80,6 +78,7 @@ const Register: React.FC = () => {
             autoFocus
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -91,6 +90,7 @@ const Register: React.FC = () => {
             autoComplete="family-name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -102,6 +102,7 @@ const Register: React.FC = () => {
             autoComplete="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -113,6 +114,7 @@ const Register: React.FC = () => {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -125,28 +127,44 @@ const Register: React.FC = () => {
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
           />
-          {error && (
-            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-              {error}
-            </Typography>
-          )}
-          {success && (
-            <Typography color="primary" variant="body2" sx={{ mt: 1 }}>
-              {success}
-            </Typography>
-          )}
+          {/* NEW: Confirm Password Field */}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            id="confirmPassword"
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            disabled={loading}
+            error={password !== confirmPassword && confirmPassword !== ''} // Visual error if mismatch
+            helperText={password !== confirmPassword && confirmPassword !== '' ? 'Passwords do not match' : ''}
+          />
+
+          {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>{error}</Alert>}
+          {success && <Alert severity="success" sx={{ mt: 2, width: '100%' }}>{success}</Alert>}
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            SIGN UP
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
           </Button>
-          <Link href="/login" variant="body2">
-            Already have an account? Login
-          </Link>
+          <Box sx={{ textAlign: 'center' }}>
+            <RouterLink to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Typography variant="body2" color="primary">
+                Already have an account? Sign In
+              </Typography>
+            </RouterLink>
+          </Box>
         </Box>
       </Paper>
     </Container>

@@ -9,7 +9,7 @@ const Layout: React.FC = () => {
       <Header />
       <Box component="main" sx={{ p: 3 }}>
         <Outlet />{" "}
-        {/* This is where the specific page component (e.g., AllTasks) will be rendered */}
+        
       </Box>
     </Box>
   );

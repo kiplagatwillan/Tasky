@@ -18,7 +18,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import TaskFormDialog from "../components/TaskFormDialog"; // Import the new dialog component
+import TaskFormDialog from "../components/TaskFormDialog"; 
 
 interface Task {
   id: string;
@@ -187,7 +187,7 @@ const AllTasks: React.FC = () => {
                       sx={{ mr: 1 }}
                     >
                       {" "}
-                      {/* Pass the whole task object */}
+                     
                       <EditIcon />
                     </IconButton>
                     <IconButton

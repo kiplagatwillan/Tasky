@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { jwtDecode } from "jwt-decode"; // Note the named import for jwtDecode
+import { jwtDecode } from "jwt-decode"; 
 
-// Define types for User and AuthContext
+
 interface User {
   id: string;
   firstName: string;
@@ -20,10 +20,10 @@ interface AuthContextType {
   logout: () => void;
 }
 
-// Create the context
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Auth Provider Component
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -37,14 +37,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     if (storedToken && storedUser) {
       try {
-        const decodedToken: any = jwtDecode(storedToken); // Decode token to check expiry
+        const decodedToken: any = jwtDecode(storedToken); 
         if (decodedToken.exp * 1000 > Date.now()) {
-          // Check if token is expired
+          
           setIsAuthenticated(true);
           setToken(storedToken);
           setUser(JSON.parse(storedUser));
         } else {
-          // Token expired, clear storage
+          
           localStorage.removeItem("token");
           localStorage.removeItem("user");
         }
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-// Custom hook to use the AuthContext
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
