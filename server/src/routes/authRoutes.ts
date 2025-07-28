@@ -18,7 +18,6 @@ router.post("/register", async (req, res) => {
         ],
       },
     });
-
     if (existingUser) {
       return res
         .status(409)
