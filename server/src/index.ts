@@ -14,7 +14,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 app.use(cors({
-  origin: "https://tasky-livid-one.vercel.app/", 
+  origin: "https://tasky-nxzs.vercel.app/", 
   credentials: true
 }));
 
