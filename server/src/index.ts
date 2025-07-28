@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
 app.use(cors({
   origin: [
     "http://localhost:5173", 
-    "https://tasky-peach.vercel.app/"
+    "https://tasky-peach.vercel.app"
   ],
   credentials: true
 }));
