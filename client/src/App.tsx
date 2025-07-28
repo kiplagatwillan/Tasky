@@ -16,6 +16,7 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
+
 import AllTasks from "./pages/AllTasks";
 import CompletedTasks from "./pages/CompletedTasks";
 import Trash from "./pages/Trash";
@@ -23,43 +24,26 @@ import NewTask from "./pages/NewTask";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile"; 
-
+import Profile from "./pages/Profile";
 
 const lightTheme = createTheme({
   palette: {
     mode: "light",
-    primary: {
-      main: "#4CAF50", 
-    },
-    secondary: {
-      main: "#FFA000", 
-    },
-    background: {
-      default: "#F5F5F5", 
-      paper: "#FFFFFF", 
-    },
-    text: {
-      primary: "#333333",
-      secondary: "#666666",
-    },
+    primary: { main: "#4CAF50" },
+    secondary: { main: "#FFA000" },
+    background: { default: "#F5F5F5", paper: "#FFFFFF" },
+    text: { primary: "#333333", secondary: "#666666" },
   },
   typography: {
-    fontFamily: "Roboto, sans-serif", 
-    h4: {
-      fontWeight: 600,
-      color: "#333333",
-    },
-    h5: {
-      fontWeight: 500,
-      color: "#444444",
-    },
+    fontFamily: "Roboto, sans-serif",
+    h4: { fontWeight: 600, color: "#333333" },
+    h5: { fontWeight: 500, color: "#444444" },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "none", 
+          textTransform: "none",
           borderRadius: "8px",
         },
       },
@@ -67,16 +51,16 @@ const lightTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#FFFFFF", 
-          color: "#333333", 
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)", 
+          backgroundColor: "#FFFFFF",
+          color: "#333333",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: "12px", 
+          borderRadius: "12px",
           padding: "16px",
         },
       },
@@ -89,10 +73,9 @@ const AppContent: React.FC = () => {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <CssBaseline /> 
+      <CssBaseline />
       <AppBar position="static">
         <Toolbar>
-          
           <Typography
             variant="h6"
             component={RouterLink}
@@ -108,50 +91,23 @@ const AppContent: React.FC = () => {
           </Typography>
 
           {user ? (
-            
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/tasks"
-                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
-              >
+              <Button component={RouterLink} to="/tasks" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
                 My Active Tasks
               </Button>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/new-task"
-                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
-              >
+              <Button component={RouterLink} to="/new-task" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
                 New Task
               </Button>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/completed-tasks"
-                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
-              >
+              <Button component={RouterLink} to="/completed-tasks" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
                 Completed Tasks
               </Button>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/trash"
-                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
-              >
+              <Button component={RouterLink} to="/trash" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
                 Trash
               </Button>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/profile"
-                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
-              >
+              <Button component={RouterLink} to="/profile" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
                 Welcome, {user.firstName}!
               </Button>
               <Button
-                color="inherit"
                 onClick={logout}
                 sx={{
                   ml: 2,
@@ -164,14 +120,8 @@ const AppContent: React.FC = () => {
               </Button>
             </Box>
           ) : (
-            
             <Box>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/login"
-                sx={{ mr: 1, color: lightTheme.palette.text.primary }}
-              >
+              <Button component={RouterLink} to="/login" sx={{ mr: 1, color: lightTheme.palette.text.primary }}>
                 Login
               </Button>
               <Button
@@ -190,10 +140,8 @@ const AppContent: React.FC = () => {
           )}
         </Toolbar>
       </AppBar>
-      
+
       <Box sx={{ mt: 2, p: 2 }}>
-        {" "}
-        
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -202,8 +150,9 @@ const AppContent: React.FC = () => {
           <Route path="/new-task" element={<NewTask />} />
           <Route path="/completed-tasks" element={<CompletedTasks />} />
           <Route path="/trash" element={<Trash />} />
-          <Route path="/profile" element={<Profile />} />{" "}
-          
+          <Route path="/profile" element={<Profile />} />
+          {/* 🧩 Catch-all for broken links */}
+          <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
       </Box>
     </ThemeProvider>
