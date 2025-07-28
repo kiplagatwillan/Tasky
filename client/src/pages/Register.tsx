@@ -32,7 +32,7 @@ const Register: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}auth/register`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, {
         firstName,
         lastName,
         username,
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
       setSuccess(response.data.message);
 
       
-      const loginResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}auth/login`, {
+      const loginResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
         email, 
         password,
       });
