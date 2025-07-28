@@ -7,24 +7,32 @@ import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import taskRoutes from "./routes/taskRoutes";
 
-dotenv.config(); 
+dotenv.config();
 
 const app = express();
 const prisma = new PrismaClient();
 
-app.use(express.json());
+
 app.use(cors({
-  origin: "https://tasky-livid-one.vercel.app/", 
-  credentials: true
+  origin: [
+    "http://localhost:5173", 
+    "https://tasky-nxzs.vercel.app", 
+  ],
+  credentials: true,
 }));
+
+app.use(express.json());
+
 
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-app.use("/api/auth", authRoutes);     
+
+app.use("/api/auth", authRoutes);    
 app.use("/api/user", userRoutes);     
 app.use("/api/tasks", taskRoutes);    
+
 
 app.get("/api", (req, res) => {
   res.send("Welcome to the API endpoint!");
