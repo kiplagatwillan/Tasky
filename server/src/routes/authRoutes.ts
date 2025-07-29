@@ -1,17 +1,41 @@
 import { Router } from 'express';
-import bcrypt from 'bcryptjs'; 
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../index';
-import { protect } from '../middleware/authMiddleware'; 
+import { protect } from '../middleware/authMiddleware';
 import { Prisma } from '@prisma/client';
+import zxcvbn from 'zxcvbn';
 
 const router = Router();
+
+const MIN_PASSWORD_STRENGTH_SCORE = 2;
+
+const checkPasswordStrength = (password: string): string | null => {
+    const result = zxcvbn(password);
+
+    if (result.score < MIN_PASSWORD_STRENGTH_SCORE) {
+        let message = `Password is too weak. Score: ${result.score}/4.`;
+        if (result.feedback.warning) {
+            message += ` Warning: ${result.feedback.warning}.`;
+        }
+        if (result.feedback.suggestions && result.feedback.suggestions.length > 0) {
+            message += ` Suggestions: ${result.feedback.suggestions.join(', ')}.`;
+        }
+        return message;
+    }
+    return null;
+};
 
 router.post('/register', async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
 
   if (!firstName || !lastName || !username || !email || !password) {
     return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  const strengthError = checkPasswordStrength(password);
+  if (strengthError) {
+      return res.status(400).json({ message: strengthError });
   }
 
   try {
@@ -62,7 +86,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-
 router.post('/login', async (req, res) => {
   const { emailOrUsername, password } = req.body;
 
@@ -84,7 +107,7 @@ router.post('/login', async (req, res) => {
         lastName: true,
         username: true,
         email: true,
-        password: true, 
+        password: true,
         avatar: true,
       }
     });
@@ -101,7 +124,6 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 
-  
     const { password: _, ...userWithoutPassword } = user;
     res.status(200).json({ message: 'Logged in successfully!', token, user: userWithoutPassword });
   } catch (error) {
@@ -110,13 +132,17 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 router.patch('/password', protect, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  const userId = req.userId; 
+  const userId = req.userId;
 
   if (!userId || !currentPassword || !newPassword) {
     return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  const strengthError = checkPasswordStrength(newPassword);
+  if (strengthError) {
+      return res.status(400).json({ message: strengthError });
   }
 
   try {

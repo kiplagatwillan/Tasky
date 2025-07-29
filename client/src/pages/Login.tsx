@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -10,18 +10,24 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { login } = useAuth(); 
+  const { login } = useAuth();
+
+  useEffect(() => {
+    setEmailOrUsername("");
+    setPassword("");
+    setError(null);
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(null); 
+    setError(null);
 
     try {
       const response = await axios.post(
@@ -33,8 +39,8 @@ const Login: React.FC = () => {
       );
 
       const { token, user } = response.data;
-      login(token, user); 
-      navigate("/tasks"); 
+      login(token, user);
+      navigate("/tasks");
     } catch (err: any) {
       console.error("Login error:", err);
       if (err.response && err.response.data && err.response.data.message) {
