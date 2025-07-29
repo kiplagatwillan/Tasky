@@ -33,7 +33,7 @@ const NewTask: React.FC = () => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks`,
         { title, description },
         {
           headers: {
@@ -47,7 +47,7 @@ const NewTask: React.FC = () => {
 
       
       setTimeout(() => {
-        navigate("/tasks");
+        navigate("/api/tasks");
       }, 1500);
     } catch (err: any) {
       console.error("Failed to create task:", err);

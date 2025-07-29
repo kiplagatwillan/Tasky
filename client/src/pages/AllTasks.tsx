@@ -42,7 +42,7 @@ const AllTasks: React.FC = () => {
     setError(null);
     try {
       const response = await axios.get<Task[]>(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks?status=active`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks?status=active`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ const AllTasks: React.FC = () => {
     try {
       const endpoint = currentStatus ? "incomplete" : "complete";
       await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks/${endpoint}/${taskId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks/${endpoint}/${taskId}`,
         {},
         {
           headers: {

@@ -43,7 +43,7 @@ const CompletedTasks: React.FC = () => {
     setError(null);
     try {
       const response = await axios.get<Task[]>(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks?status=completed`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks?status=completed`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,7 +72,7 @@ const CompletedTasks: React.FC = () => {
   const handleToggleComplete = async (taskId: string) => {
     try {
       await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks/incomplete/${taskId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks/incomplete/${taskId}`,
         {},
         {
           headers: {
@@ -95,7 +95,7 @@ const CompletedTasks: React.FC = () => {
     ) {
       try {
         await axios.delete(
-          `${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/tasks/${taskId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ const CompletedTasks: React.FC = () => {
     }
     try {
       await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks/${taskId}`,
         { title, description },
         {
           headers: {

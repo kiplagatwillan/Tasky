@@ -38,7 +38,7 @@ const Trash: React.FC = () => {
     try {
       
       const response = await axios.get<Task[]>(
-        `${import.meta.env.VITE_API_BASE_URL}/tasks?status=trash`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks?status=trash`,
         {
           
           headers: {
@@ -75,7 +75,7 @@ const Trash: React.FC = () => {
       try {
         
         await axios.patch(
-          `${import.meta.env.VITE_API_BASE_URL}/tasks/restore/${taskId}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/tasks/restore/${taskId}`,
           {},
           {
             
@@ -110,7 +110,7 @@ const Trash: React.FC = () => {
       try {
         
         await axios.delete(
-          `${import.meta.env.VITE_API_BASE_URL}/tasks/hard-delete/${taskId}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/tasks/hard-delete/${taskId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
