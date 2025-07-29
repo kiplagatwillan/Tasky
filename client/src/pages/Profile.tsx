@@ -58,7 +58,7 @@ const Profile: React.FC = () => {
       }
       setLoadingProfile(true);
       try {
-        const response = await axios.get<User>(`${import.meta.env.VITE_API_BASE_URL}/user`, {
+        const response = await axios.get<User>(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUser(response.data);
@@ -84,7 +84,7 @@ const Profile: React.FC = () => {
     setIsUpdatingProfile(true);
 
     try {
-      const response = await axios.patch<any>(`${import.meta.env.VITE_API_BASE_URL}/user`, {
+      const response = await axios.patch<any>(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
         firstName,
         lastName,
         username,
