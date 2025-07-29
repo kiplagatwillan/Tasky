@@ -25,16 +25,18 @@ app.use(express.json());
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/tasks", taskRoutes);
 
+app.use(express.static(path.join(__dirname, '../dist')));
+
 app.get("/api", (req, res) => {
   res.send("Welcome to the API endpoint!");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
