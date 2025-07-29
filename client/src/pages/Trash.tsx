@@ -10,11 +10,10 @@ import {
   IconButton,
   Paper,
 } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"; 
-import RestoreIcon from "@mui/icons-material/Restore"; 
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import RestoreIcon from "@mui/icons-material/Restore";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-
 
 interface Task {
   id: string;
@@ -36,11 +35,9 @@ const Trash: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      
       const response = await axios.get<Task[]>(
         `${import.meta.env.VITE_API_BASE_URL}/api/tasks?status=trash`,
         {
-          
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +62,6 @@ const Trash: React.FC = () => {
     }
   }, [token]);
 
-  
   const handleRestore = async (taskId: string) => {
     if (
       window.confirm(
@@ -73,18 +69,16 @@ const Trash: React.FC = () => {
       )
     ) {
       try {
-        
         await axios.patch(
           `${import.meta.env.VITE_API_BASE_URL}/api/tasks/restore/${taskId}`,
           {},
           {
-            
             headers: {
               Authorization: `Bearer ${token}`,
             },
           },
         );
-        fetchTrashedTasks(); 
+        fetchTrashedTasks();
       } catch (err) {
         console.error("Failed to restore task:", err);
         const axiosError = err as any;
@@ -93,7 +87,7 @@ const Trash: React.FC = () => {
           axiosError.response.data &&
           axiosError.response.data.message
         ) {
-          setError(axiosError.response.data.message); 
+          setError(axiosError.response.data.message);
         } else {
           setError("Failed to restore task from trash.");
         }
@@ -108,7 +102,6 @@ const Trash: React.FC = () => {
       )
     ) {
       try {
-        
         await axios.delete(
           `${import.meta.env.VITE_API_BASE_URL}/api/tasks/hard-delete/${taskId}`,
           {
@@ -117,7 +110,7 @@ const Trash: React.FC = () => {
             },
           },
         );
-        fetchTrashedTasks(); 
+        fetchTrashedTasks();
       } catch (err) {
         console.error("Failed to permanently delete task:", err);
         const axiosError = err as any;
@@ -126,7 +119,7 @@ const Trash: React.FC = () => {
           axiosError.response.data &&
           axiosError.response.data.message
         ) {
-          setError(axiosError.response.data.message); 
+          setError(axiosError.response.data.message);
         } else {
           setError("Failed to permanently delete task.");
         }
@@ -182,7 +175,6 @@ const Trash: React.FC = () => {
                       onClick={() => handlePermanentlyDelete(task.id)}
                     >
                       <DeleteForeverIcon color="error" />{" "}
-                      
                     </IconButton>
                   </Box>
                 }

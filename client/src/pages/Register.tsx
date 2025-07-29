@@ -70,12 +70,23 @@ const Register: React.FC = () => {
     <Container component="main" maxWidth="xs">
       <Paper
         elevation={3}
-        sx={{ mt: 8, p: 4, display: "flex", flexDirection: "column", alignItems: "center" }}
+        sx={{
+          mt: 8,
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <Box component="form" onSubmit={handleRegister} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleRegister}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             margin="normal"
             required
@@ -177,10 +188,17 @@ const Register: React.FC = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Sign Up"}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
           <Box sx={{ textAlign: "center" }}>
-            <RouterLink to="/login" style={{ textDecoration: "none", color: "inherit" }}>
+            <RouterLink
+              to="/login"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <Typography variant="body2" color="primary">
                 Already have an account? Sign In
               </Typography>

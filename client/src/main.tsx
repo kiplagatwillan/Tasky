@@ -4,16 +4,15 @@ import App from "./App.tsx";
 // import './index.css';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { AuthProvider } from "./context/AuthContext.tsx"; 
-
+import { AuthProvider } from "./context/AuthContext.tsx";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#4CAF50", 
+      main: "#4CAF50",
     },
     secondary: {
-      main: "#FFC107", 
+      main: "#FFC107",
     },
   },
   typography: {
@@ -32,7 +31,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <CssBaseline />
       <AuthProvider>
         {" "}
-        
         <App />
       </AuthProvider>
     </ThemeProvider>

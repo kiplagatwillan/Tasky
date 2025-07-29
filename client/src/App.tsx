@@ -92,19 +92,39 @@ const AppContent: React.FC = () => {
 
           {user ? (
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Button component={RouterLink} to="/tasks" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
+              <Button
+                component={RouterLink}
+                to="/tasks"
+                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
+              >
                 My Active Tasks
               </Button>
-              <Button component={RouterLink} to="/new-task" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
+              <Button
+                component={RouterLink}
+                to="/new-task"
+                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
+              >
                 New Task
               </Button>
-              <Button component={RouterLink} to="/completed-tasks" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
+              <Button
+                component={RouterLink}
+                to="/completed-tasks"
+                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
+              >
                 Completed Tasks
               </Button>
-              <Button component={RouterLink} to="/trash" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
+              <Button
+                component={RouterLink}
+                to="/trash"
+                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
+              >
                 Trash
               </Button>
-              <Button component={RouterLink} to="/profile" sx={{ mx: 1, color: lightTheme.palette.text.primary }}>
+              <Button
+                component={RouterLink}
+                to="/profile"
+                sx={{ mx: 1, color: lightTheme.palette.text.primary }}
+              >
                 Welcome, {user.firstName}!
               </Button>
               <Button
@@ -121,7 +141,11 @@ const AppContent: React.FC = () => {
             </Box>
           ) : (
             <Box>
-              <Button component={RouterLink} to="/login" sx={{ mr: 1, color: lightTheme.palette.text.primary }}>
+              <Button
+                component={RouterLink}
+                to="/login"
+                sx={{ mr: 1, color: lightTheme.palette.text.primary }}
+              >
                 Login
               </Button>
               <Button

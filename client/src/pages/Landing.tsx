@@ -1,8 +1,7 @@
 import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { keyframes } from "@emotion/react"; 
-
+import { keyframes } from "@emotion/react";
 
 const fadeIn = keyframes`
   from {
@@ -14,7 +13,6 @@ const fadeIn = keyframes`
     transform: translateY(0);
   }
 `;
-
 
 const backgroundZoomPan = keyframes`
   0% {
@@ -35,23 +33,21 @@ const Landing: React.FC = () => {
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 64px)", 
+        minHeight: "calc(100vh - 64px)",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
-        px: 3, 
+        px: 3,
 
-        
-        backgroundImage: "url(/images/background-image.jpg)", 
-        backgroundSize: "cover", 
+        backgroundImage: "url(/images/background-image.jpg)",
+        backgroundSize: "cover",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
-        animation: `${backgroundZoomPan} 20s ease-in-out infinite alternate`, 
+        animation: `${backgroundZoomPan} 20s ease-in-out infinite alternate`,
 
-        
-        position: "relative", 
+        position: "relative",
         "&::before": {
           content: '""',
           position: "absolute",
@@ -59,23 +55,22 @@ const Landing: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "rgba(255, 255, 255, 0.7)", 
-          zIndex: 1, 
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          zIndex: 1,
         },
       }}
     >
       <Container maxWidth="md" sx={{ zIndex: 2, position: "relative" }}>
         {" "}
-      
         <Typography
           variant="h3"
           component="h1"
           gutterBottom
           sx={{
             fontWeight: 700,
-            color: "primary.main", 
+            color: "primary.main",
             mb: 2,
-            animation: `${fadeIn} 1s ease-out 0.2s forwards`, 
+            animation: `${fadeIn} 1s ease-out 0.2s forwards`,
             opacity: 0,
           }}
         >
@@ -88,8 +83,8 @@ const Landing: React.FC = () => {
           sx={{
             color: "text.secondary",
             mb: 4,
-            animation: `${fadeIn} 1s ease-out 0.4s forwards`, 
-            opacity: 0, 
+            animation: `${fadeIn} 1s ease-out 0.4s forwards`,
+            opacity: 0,
           }}
         >
           TaskY helps you easily and efficiently manage all your tasks, from
@@ -99,11 +94,11 @@ const Landing: React.FC = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2, 
-            flexDirection: { xs: "column", sm: "row" }, 
+            gap: 2,
+            flexDirection: { xs: "column", sm: "row" },
             justifyContent: "center",
-            animation: `${fadeIn} 10s ease-out 0.6s forwards`, 
-            opacity: 0, 
+            animation: `${fadeIn} 10s ease-out 0.6s forwards`,
+            opacity: 0,
           }}
         >
           <Button
@@ -137,7 +132,7 @@ const Landing: React.FC = () => {
               color: "primary.main",
               "&:hover": {
                 backgroundColor: "primary.light",
-                color: "#FFF", 
+                color: "#FFF",
               },
             }}
           >

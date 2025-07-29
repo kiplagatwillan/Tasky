@@ -9,7 +9,6 @@ const Layout: React.FC = () => {
       <Header />
       <Box component="main" sx={{ p: 3 }}>
         <Outlet />{" "}
-        
       </Box>
     </Box>
   );

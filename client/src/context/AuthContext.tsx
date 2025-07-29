@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { jwtDecode } from "jwt-decode"; 
-
+import { jwtDecode } from "jwt-decode";
 
 interface User {
   id: string;
@@ -20,9 +19,7 @@ interface AuthContextType {
   logout: () => void;
 }
 
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -37,14 +34,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     if (storedToken && storedUser) {
       try {
-        const decodedToken: any = jwtDecode(storedToken); 
+        const decodedToken: any = jwtDecode(storedToken);
         if (decodedToken.exp * 1000 > Date.now()) {
-          
           setIsAuthenticated(true);
           setToken(storedToken);
           setUser(JSON.parse(storedUser));
         } else {
-          
           localStorage.removeItem("token");
           localStorage.removeItem("user");
         }
@@ -80,7 +75,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     </AuthContext.Provider>
   );
 };
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

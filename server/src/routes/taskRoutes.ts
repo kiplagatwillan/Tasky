@@ -110,11 +110,9 @@ router.patch("/:id", protect, async (req, res) => {
   const { title, description } = req.body;
 
   if (!title && !description) {
-    return res
-      .status(400)
-      .json({
-        message: "At least title or description must be provided for update.",
-      });
+    return res.status(400).json({
+      message: "At least title or description must be provided for update.",
+    });
   }
 
   try {
@@ -190,11 +188,9 @@ router.patch("/restore/:id", protect, async (req, res) => {
     });
 
     if (!existingTask) {
-      return res
-        .status(404)
-        .json({
-          message: "Task not found in trash or does not belong to user.",
-        });
+      return res.status(404).json({
+        message: "Task not found in trash or does not belong to user.",
+      });
     }
 
     await prisma.task.update({
@@ -218,12 +214,10 @@ router.patch("/complete/:id", protect, async (req, res) => {
     });
 
     if (!existingTask) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Task not found, already completed, or does not belong to user.",
-        });
+      return res.status(404).json({
+        message:
+          "Task not found, already completed, or does not belong to user.",
+      });
     }
 
     await prisma.task.update({
@@ -247,12 +241,10 @@ router.patch("/incomplete/:id", protect, async (req, res) => {
     });
 
     if (!existingTask) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Task not found, already incomplete, or does not belong to user.",
-        });
+      return res.status(404).json({
+        message:
+          "Task not found, already incomplete, or does not belong to user.",
+      });
     }
 
     await prisma.task.update({
@@ -268,7 +260,7 @@ router.patch("/incomplete/:id", protect, async (req, res) => {
 
 router.delete("/hard-delete/:id", protect, async (req, res) => {
   const { id } = req.params;
-  const userId = req.userId; 
+  const userId = req.userId;
 
   if (!userId) {
     return res.status(401).json({ message: "User not authenticated." });
@@ -290,11 +282,9 @@ router.delete("/hard-delete/:id", protect, async (req, res) => {
     }
 
     if (!task.isDeleted) {
-      return res
-        .status(400)
-        .json({
-          message: "Task is not in trash and cannot be permanently deleted.",
-        });
+      return res.status(400).json({
+        message: "Task is not in trash and cannot be permanently deleted.",
+      });
     }
 
     await prisma.task.delete({
@@ -304,12 +294,10 @@ router.delete("/hard-delete/:id", protect, async (req, res) => {
     res.status(200).json({ message: "Task permanently deleted successfully." });
   } catch (error) {
     console.error("Error permanently deleting task:", error);
-    res
-      .status(500)
-      .json({
-        message: "Failed to permanently delete task.",
-        error: error instanceof Error ? error.message : String(error),
-      });
+    res.status(500).json({
+      message: "Failed to permanently delete task.",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 });
 

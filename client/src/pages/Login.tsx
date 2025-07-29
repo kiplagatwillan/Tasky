@@ -17,12 +17,15 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
 
   useEffect(() => {
     setEmailOrUsername("");
     setPassword("");
     setError(null);
+    logout();
+    localStorage.clear();
+    sessionStorage.clear();
   }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -112,4 +115,5 @@ const Login: React.FC = () => {
     </Container>
   );
 };
+
 export default Login;

@@ -9,7 +9,6 @@ import {
   Alert,
 } from "@mui/material";
 
-
 interface Task {
   id: string;
   title: string;
@@ -28,7 +27,7 @@ interface TaskFormDialogProps {
     title: string,
     description: string,
   ) => Promise<void>;
-  currentTask: Task | null; 
+  currentTask: Task | null;
 }
 
 const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
@@ -42,18 +41,15 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  
-
   useEffect(() => {
     if (currentTask) {
       setTitle(currentTask.title);
       setDescription(currentTask.description);
     } else {
-      
       setTitle("");
       setDescription("");
     }
-    setError(null); 
+    setError(null);
     setIsSaving(false);
   }, [currentTask, open]);
 
@@ -66,9 +62,8 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({
     setIsSaving(true);
     try {
       await onSave(currentTask ? currentTask.id : null, title, description);
-      onClose(); 
+      onClose();
     } catch (err: any) {
-      
       setError("Failed to save task. Please try again.");
       console.error("Error saving task in dialog:", err);
     } finally {

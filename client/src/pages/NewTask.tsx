@@ -25,7 +25,6 @@ const NewTask: React.FC = () => {
     setError(null);
     setSuccess(null);
 
-    
     if (!title.trim()) {
       setError("Task title cannot be empty.");
       return;
@@ -42,10 +41,9 @@ const NewTask: React.FC = () => {
         },
       );
       setSuccess("Task created successfully!");
-      setTitle(""); 
-      setDescription(""); 
+      setTitle("");
+      setDescription("");
 
-      
       setTimeout(() => {
         navigate("/tasks");
       }, 1500);
@@ -90,7 +88,7 @@ const NewTask: React.FC = () => {
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            error={!!error && title.trim() === ""} 
+            error={!!error && title.trim() === ""}
             helperText={
               !!error && title.trim() === "" ? "Task title is required." : ""
             }
