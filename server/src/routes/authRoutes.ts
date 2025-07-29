@@ -141,13 +141,11 @@ router.post("/login", async (req, res) => {
     );
 
     const { password: _, ...userWithoutPassword } = user;
-    res
-      .status(200)
-      .json({
-        message: "Logged in successfully!",
-        token,
-        user: userWithoutPassword,
-      });
+    res.status(200).json({
+      message: "Logged in successfully!",
+      token,
+      user: userWithoutPassword,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

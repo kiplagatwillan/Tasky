@@ -69,7 +69,13 @@ const Login: React.FC = () => {
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Login to TaskY
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1 }}
+          autoComplete="off"
+        >
           <TextField
             margin="normal"
             required
@@ -77,7 +83,7 @@ const Login: React.FC = () => {
             id="emailOrUsername"
             label="Email or Username"
             name="emailOrUsername"
-            autoComplete="email or username"
+            autoComplete="off"
             autoFocus
             value={emailOrUsername}
             onChange={(e) => setEmailOrUsername(e.target.value)}
@@ -90,7 +96,7 @@ const Login: React.FC = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
