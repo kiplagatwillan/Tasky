@@ -94,7 +94,7 @@ const AllTasks: React.FC = () => {
     if (window.confirm("Are you sure you want to move this task to trash?")) {
       try {
         await axios.delete(
-          `${import.meta.env.VITE_API_BASE_URL}/tasks/${taskId}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/tasks/${taskId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

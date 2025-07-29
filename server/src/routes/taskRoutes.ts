@@ -268,7 +268,7 @@ router.patch("/incomplete/:id", protect, async (req, res) => {
 
 router.delete("/hard-delete/:id", protect, async (req, res) => {
   const { id } = req.params;
-  const userId = req.userId; // From protect middleware
+  const userId = req.userId; 
 
   if (!userId) {
     return res.status(401).json({ message: "User not authenticated." });
