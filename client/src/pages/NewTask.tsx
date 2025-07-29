@@ -47,7 +47,7 @@ const NewTask: React.FC = () => {
 
       
       setTimeout(() => {
-        navigate("/api/tasks");
+        navigate("/tasks");
       }, 1500);
     } catch (err: any) {
       console.error("Failed to create task:", err);
