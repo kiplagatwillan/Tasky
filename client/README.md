@@ -1,54 +1,88 @@
-# React + TypeScript + Vite
+# ✅ Tasky - Your Personal Task Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tasky** is a full-stack web application that empowers users to efficiently manage daily tasks with ease. It offers a clean, intuitive interface and robust functionality including user authentication, task organization, profile customization, and responsive design. Built with modern technologies like React, Node.js, TypeScript, PostgreSQL, and Material-UI, Tasky is designed for performance, scalability, and productivity.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+### 🔐 User Authentication
+- Secure registration, login, and logout.
+- Strong password validation using [`zxcvbn`](https://github.com/dropbox/zxcvbn).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🗂️ Task Management
+- **Create**: Add tasks with a title and optional description.
+- **Read**: View tasks in categorized views:
+  - Active Tasks
+  - Completed Tasks
+  - Trash (soft-deleted)
+- **Update**: Edit task title and description.
+- **Toggle**: Mark tasks as complete/incomplete.
+- **Delete**:
+  - Soft Delete (move to trash)
+  - Permanent Delete (from trash)
+- **Restore**: Move tasks back from trash to active state.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+### 👤 User Profile
+- View and update personal information (name, username, email).
+- Change account password.
+- Upload a profile picture (avatar).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 💻 Responsive Frontend
+- Built using **Material-UI (MUI)** for a sleek, modern design.
+- Fully responsive and mobile-friendly.
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+### 🧩 Architecture
+- Fully separated **frontend** and **backend** for maintainability and scalability.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+---
+
+## 🚀 Technologies Used
+
+### 🔙 Backend
+- **Node.js** - JavaScript runtime
+- **Express.js** - Backend framework
+- **TypeScript** - Type-safe JavaScript
+- **Prisma ORM** - Database access layer
+- **PostgreSQL** - Relational database
+- **bcryptjs** - Password hashing
+- **jsonwebtoken** - JWT-based authentication
+- **multer** - File uploads
+- **zxcvbn** - Password strength estimation
+- **dotenv** - Environment configuration
+- **cors** - Cross-Origin Resource Sharing
+
+### 🖥️ Frontend
+- **React** - UI framework
+- **Vite** - Fast frontend build tool
+- **TypeScript** - For type-safe component development
+- **Material-UI (MUI)** - UI component library
+- **axios** - API communication
+- **react-router-dom** - Client-side routing
+- **jwt-decode** - Decode JWT tokens in the browser
+
+### 🗃️ Database
+- **PostgreSQL** - Used to store user and task data
+
+### ☁️ Deployment
+- **Render** - Hosting backend & PostgreSQL
+- **Vercel** - Hosting frontend
+
+---
+
+## ⚙️ Setup Instructions
+
+### 📦 Prerequisites
+Make sure the following are installed on your system:
+- Node.js (v18+)
+- npm or yarn
+- PostgreSQL
+- Git
+
+---
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/kiplagatwillan/Tasky.git
+cd Tasky
