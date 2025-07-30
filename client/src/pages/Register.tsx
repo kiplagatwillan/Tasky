@@ -23,6 +23,7 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -50,9 +51,9 @@ const Register: React.FC = () => {
         password,
       });
 
-      setSuccess(response.data.message);
-
+      setSuccess("Account created successfully!");
       login(response.data.token, response.data.user);
+      setReloadKey(prev => prev + 1);
       navigate("/tasks");
     } catch (err: any) {
       console.error("Registration error:", err);
@@ -67,7 +68,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" key={reloadKey}>
       <Paper
         elevation={3}
         sx={{
@@ -81,12 +82,7 @@ const Register: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleRegister}
-          noValidate
-          sx={{ mt: 1 }}
-        >
+        <Box component="form" onSubmit={handleRegister} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -149,7 +145,6 @@ const Register: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
           />
-
           <TextField
             margin="normal"
             required
@@ -169,18 +164,8 @@ const Register: React.FC = () => {
                 : ""
             }
           />
-
-          {error && (
-            <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
-              {error}
-            </Alert>
-          )}
-          {success && (
-            <Alert severity="success" sx={{ mt: 2, width: "100%" }}>
-              {success}
-            </Alert>
-          )}
-
+          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+          {success && <Alert severity="success" sx={{ mt: 2 }}>{success}</Alert>}
           <Button
             type="submit"
             fullWidth
@@ -188,17 +173,10 @@ const Register: React.FC = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Sign Up"
-            )}
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Sign Up"}
           </Button>
           <Box sx={{ textAlign: "center" }}>
-            <RouterLink
-              to="/login"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
+            <RouterLink to="/login" style={{ textDecoration: "none", color: "inherit" }}>
               <Typography variant="body2" color="primary">
                 Already have an account? Sign In
               </Typography>

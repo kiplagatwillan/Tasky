@@ -43,7 +43,7 @@ const AllTasks: React.FC = () => {
     setError(null);
     try {
       const response = await axios.get<Task[]>(
-        `${import.meta.env.VITE_API_BASE_URL}/api/tasks`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks`, 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ const AllTasks: React.FC = () => {
     }
     try {
       await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/tasks/${taskId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/tasks/${taskId}`, 
         { title, description },
         {
           headers: {
@@ -143,7 +143,7 @@ const AllTasks: React.FC = () => {
       handleCloseEditDialog();
     } catch (err: any) {
       console.error("Failed to update task:", err);
-      setError("Failed to update task.");
+      throw err;
     }
   };
 
@@ -187,6 +187,7 @@ const AllTasks: React.FC = () => {
                       onClick={() => handleEdit(task)}
                       sx={{ mr: 1 }}
                     >
+                      {" "}
                       <EditIcon />
                     </IconButton>
                     <IconButton
@@ -215,9 +216,7 @@ const AllTasks: React.FC = () => {
                     <Typography
                       variant="h6"
                       sx={{
-                        textDecoration: task.isCompleted
-                          ? "line-through"
-                          : "none",
+                        textDecoration: task.isCompleted ? "line-through" : "none",
                       }}
                     >
                       {task.title}
@@ -228,9 +227,7 @@ const AllTasks: React.FC = () => {
                       variant="body2"
                       color="text.secondary"
                       sx={{
-                        textDecoration: task.isCompleted
-                          ? "line-through"
-                          : "none",
+                        textDecoration: task.isCompleted ? "line-through" : "none",
                       }}
                     >
                       {task.description}

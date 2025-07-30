@@ -7,6 +7,8 @@ import {
   Link,
   Container,
   Paper,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,6 +18,9 @@ const Login: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+
   const navigate = useNavigate();
   const { login, logout } = useAuth();
 
@@ -31,6 +36,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -38,11 +44,12 @@ const Login: React.FC = () => {
         {
           emailOrUsername,
           password,
-        },
+        }
       );
 
       const { token, user } = response.data;
       login(token, user);
+      setReloadKey(prev => prev + 1);
       navigate("/tasks");
     } catch (err: any) {
       console.error("Login error:", err);
@@ -51,11 +58,13 @@ const Login: React.FC = () => {
       } else {
         setError("Login failed. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" key={reloadKey}>
       <Paper
         elevation={3}
         sx={{
@@ -69,13 +78,7 @@ const Login: React.FC = () => {
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Login to TaskY
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ mt: 1 }}
-          autoComplete="off"
-        >
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} autoComplete="off">
           <TextField
             margin="normal"
             required
@@ -83,10 +86,10 @@ const Login: React.FC = () => {
             id="emailOrUsername"
             label="Email or Username"
             name="emailOrUsername"
-            autoComplete="off"
             autoFocus
             value={emailOrUsername}
             onChange={(e) => setEmailOrUsername(e.target.value)}
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -96,22 +99,19 @@ const Login: React.FC = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
           />
-          {error && (
-            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-              {error}
-            </Typography>
-          )}
+          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            LOGIN
+            {loading ? <CircularProgress size={24} color="inherit" /> : "LOGIN"}
           </Button>
           <Link href="/register" variant="body2">
             Don't have an account? Sign Up
