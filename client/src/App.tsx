@@ -15,7 +15,13 @@ import {
   CssBaseline,
   ThemeProvider,
   createTheme,
+  IconButton, 
 } from "@mui/material";
+
+import GitHubIcon from "@mui/icons-material/GitHub";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook"; 
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 import AllTasks from "./pages/AllTasks";
 import CompletedTasks from "./pages/CompletedTasks";
@@ -165,7 +171,7 @@ const AppContent: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ mt: 2, p: 2 }}>
+      <Box sx={{ flexGrow: 1, mt: 2, p: 2 }}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -175,9 +181,67 @@ const AppContent: React.FC = () => {
           <Route path="/completed-tasks" element={<CompletedTasks />} />
           <Route path="/trash" element={<Trash />} />
           <Route path="/profile" element={<Profile />} />
-          {/* 🧩 Catch-all for broken links */}
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
+      </Box>
+
+      <Box
+        component="footer"
+        sx={{
+          py: 3,
+          px: 2,
+          mt: "auto",
+          backgroundColor: lightTheme.palette.background.paper,
+          borderTop: `1px solid ${lightTheme.palette.divider}`,
+          textAlign: "center",
+          color: lightTheme.palette.text.secondary,
+        }}
+      >
+        <Typography variant="body2">
+          © {new Date().getFullYear()} TaskY. All rights reserved.
+        </Typography>
+        <Box sx={{ mt: 1 }}>
+          <IconButton
+            component="a"
+            href="https://github.com/kiplagatwillan/" 
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit" 
+            sx={{ mx: 1 }}
+          >
+            <GitHubIcon />
+          </IconButton>
+          <IconButton
+            component="a"
+            href="https://www.instagram.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+            sx={{ mx: 1 }}
+          >
+            <InstagramIcon /> 
+          </IconButton>
+          <IconButton
+            component="a"
+            href="https://x.com/home" 
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+            sx={{ mx: 1 }}
+          >
+            <TwitterIcon />
+          </IconButton>
+          <IconButton
+            component="a"
+            href="#" 
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+            sx={{ mx: 1 }}
+          >
+            <FacebookIcon />
+          </IconButton>
+        </Box>
       </Box>
     </ThemeProvider>
   );
