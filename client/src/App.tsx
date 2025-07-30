@@ -189,19 +189,18 @@ const AppContent: React.FC = () => {
         <Box
           component="footer"
           sx={{
-            py: 4,
+            py: 3, // Reduced from 4 to 3 for smaller size
             px: 2,
-            backgroundColor: "transparent",
-            backgroundImage: "linear-gradient(to right, #4CAF50, #8BC34A)",
-            color: "#FFF",
-            boxShadow: "0px -4px 10px rgba(0, 0, 0, 0.1)",
-            textAlign: "center",
+            backgroundColor: '#FFFFFF', // Set to white based on image
+            color: lightTheme.palette.text.secondary, // Keep text secondary color for contrast on white
+            boxShadow: '0px -2px 8px rgba(0, 0, 0, 0.05)', // Adjusted shadow for lighter background
+            textAlign: 'center',
             borderTopLeftRadius: 16,
             borderTopRightRadius: 16,
             mt: 4,
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
+          <Typography variant="caption" sx={{ fontWeight: 500, mb: 1 }}> {/* Changed to caption variant for smaller text */}
             © {new Date().getFullYear()} TaskY. All rights reserved.
           </Typography>
           <Box sx={{ mt: 1 }}>
@@ -210,68 +209,40 @@ const AppContent: React.FC = () => {
               href="https://github.com/kiplagatwillan/"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{
-                color: "#FFF",
-                mx: 1,
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.2)",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
-              }}
+              color="inherit" // Inherits text color from parent Box
+              sx={{ mx: 1, fontSize: '1.2rem' }} // Smaller icon size
             >
-              <GitHubIcon />
+              <GitHubIcon fontSize="inherit" />
             </IconButton>
             <IconButton
               component="a"
               href="https://www.instagram.com/"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{
-                color: "#FFF",
-                mx: 1,
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.2)",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
-              }}
+              color="inherit"
+              sx={{ mx: 1, fontSize: '1.2rem' }}
             >
-              <InstagramIcon />
+              <InstagramIcon fontSize="inherit" />
             </IconButton>
             <IconButton
               component="a"
               href="https://x.com/home"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{
-                color: "#FFF",
-                mx: 1,
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.2)",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
-              }}
+              color="inherit"
+              sx={{ mx: 1, fontSize: '1.2rem' }}
             >
-              <TwitterIcon />
+              <TwitterIcon fontSize="inherit" />
             </IconButton>
             <IconButton
               component="a"
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{
-                color: "#FFF",
-                mx: 1,
-                transition: "transform 0.3s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.2)",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
-              }}
+              color="inherit"
+              sx={{ mx: 1, fontSize: '1.2rem' }}
             >
-              <FacebookIcon />
+              <FacebookIcon fontSize="inherit" />
             </IconButton>
           </Box>
         </Box>
