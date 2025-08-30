@@ -5,10 +5,51 @@ import { prisma } from "../index";
 import { protect } from "../middleware/authMiddleware";
 import { Prisma } from "@prisma/client";
 import zxcvbn from "zxcvbn";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 const router = Router();
 
 const MIN_PASSWORD_STRENGTH_SCORE = 2;
+
+// 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    
+    const uploadDir = "uploads/";
+    
+    fs.mkdirSync(uploadDir, { recursive: true });
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+   
+    const userId = (req as any).userId;
+    const ext = path.extname(file.originalname);
+    cb(null, `${userId}-${Date.now()}${ext}`);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, 
+  fileFilter: (req, file, cb) => {
+    
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      
+      cb(new Error("Only image files are allowed!") as any, false);
+    }
+  },
+});
+
+
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  console.error("FATAL ERROR: JWT_SECRET is not defined.");
+  process.exit(1); 
+}
 
 const checkPasswordStrength = (password: string): string | null => {
   const result = zxcvbn(password);
@@ -76,7 +117,7 @@ router.post("/register", async (req, res) => {
 
     const token = jwt.sign(
       { userId: user.id },
-      process.env.JWT_SECRET as string,
+      jwtSecret,
       { expiresIn: "1h" },
     );
 
@@ -136,7 +177,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       { userId: user.id },
-      process.env.JWT_SECRET as string,
+      jwtSecret,
       { expiresIn: "1h" },
     );
 
@@ -193,5 +234,42 @@ router.patch("/password", protect, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error." });
   }
 });
+
+
+router.patch(
+  "/avatar",
+  protect,
+  upload.single("avatar"),
+  async (req, res) => {
+    const userId = req.userId;
+    if (!req.file) {
+      return res.status(400).json({ message: "No avatar file provided." });
+    }
+
+    const avatarPath = req.file.path;
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { avatar: avatarPath },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          username: true,
+          email: true,
+          avatar: true,
+        },
+      });
+
+      res.status(200).json({
+        message: "Avatar uploaded successfully!",
+        user: updatedUser,
+      });
+    } catch (error) {
+      console.error("Avatar update error:", error);
+      res.status(500).json({ message: "Failed to update avatar." });
+    }
+  },
+);
 
 export default router;

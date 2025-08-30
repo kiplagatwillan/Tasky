@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Link as RouterLink,
+  useLocation, 
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import {
@@ -76,6 +77,10 @@ const lightTheme = createTheme({
 
 const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
+  const location = useLocation(); 
+
+  
+  const showFooter = location.pathname === "/";
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -186,66 +191,107 @@ const AppContent: React.FC = () => {
           </Routes>
         </Box>
 
-        <Box
-          component="footer"
-          sx={{
-            py: 3, // Reduced from 4 to 3 for smaller size
-            px: 2,
-            backgroundColor: '#FFFFFF', // Set to white based on image
-            color: lightTheme.palette.text.secondary, // Keep text secondary color for contrast on white
-            boxShadow: '0px -2px 8px rgba(0, 0, 0, 0.05)', // Adjusted shadow for lighter background
-            textAlign: 'center',
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
-            mt: 4,
-          }}
-        >
-          <Typography variant="caption" sx={{ fontWeight: 500, mb: 1 }}> {/* Changed to caption variant for smaller text */}
-            © {new Date().getFullYear()} TaskY. All rights reserved.
-          </Typography>
-          <Box sx={{ mt: 1 }}>
-            <IconButton
-              component="a"
-              href="https://github.com/kiplagatwillan/"
-              target="_blank"
-              rel="noopener noreferrer"
-              color="inherit" // Inherits text color from parent Box
-              sx={{ mx: 1, fontSize: '1.2rem' }} // Smaller icon size
-            >
-              <GitHubIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton
-              component="a"
-              href="https://www.instagram.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              color="inherit"
-              sx={{ mx: 1, fontSize: '1.2rem' }}
-            >
-              <InstagramIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton
-              component="a"
-              href="https://x.com/home"
-              target="_blank"
-              rel="noopener noreferrer"
-              color="inherit"
-              sx={{ mx: 1, fontSize: '1.2rem' }}
-            >
-              <TwitterIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton
-              component="a"
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              color="inherit"
-              sx={{ mx: 1, fontSize: '1.2rem' }}
-            >
-              <FacebookIcon fontSize="inherit" />
-            </IconButton>
+        {showFooter && (
+          <Box
+            component="footer"
+            sx={{
+              py: 4,
+              px: 2,
+             backgroundColor: "#0f172a",
+            
+             color: "#FFF",
+              textAlign: "center",
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+              mt: 4,
+              boxShadow: "0px -4px 10px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+              TaskY
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, maxWidth: "600px", mx: "auto" }}>
+              The simple way to get things done. Stay organized, collaborate with others, and achieve your goals.
+            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <IconButton
+                component="a"
+                href="https://github.com/kiplagatwillan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  color: "#FFF",
+                  mx: 1,
+                  transition: "transform 0.3s ease, color 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.3)",
+                    color: lightTheme.palette.secondary.main,
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                <GitHubIcon />
+              </IconButton>
+              <IconButton
+                component="a"
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  color: "#FFF",
+                  mx: 1,
+                  transition: "transform 0.3s ease, color 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.3)",
+                    color: lightTheme.palette.secondary.main,
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                <InstagramIcon />
+              </IconButton>
+              <IconButton
+                component="a"
+                href="https://x.com/home"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  color: "#FFF",
+                  mx: 1,
+                  transition: "transform 0.3s ease, color 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.3)",
+                    color: lightTheme.palette.secondary.main,
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                <TwitterIcon />
+              </IconButton>
+              <IconButton
+                component="a"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  color: "#FFF",
+                  mx: 1,
+                  transition: "transform 0.3s ease, color 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.3)",
+                    color: lightTheme.palette.secondary.main,
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                <FacebookIcon />
+              </IconButton>
+            </Box>
+            <Typography variant="caption" sx={{ mt: 2, display: "block" }}>
+              © {new Date().getFullYear()} TaskY. All rights reserved.
+            </Typography>
           </Box>
-        </Box>
+        )}
       </Box>
     </ThemeProvider>
   );
