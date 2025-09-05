@@ -236,6 +236,7 @@ router.patch("/password", protect, async (req, res) => {
 });
 
 
+
 router.patch(
   "/avatar",
   protect,
