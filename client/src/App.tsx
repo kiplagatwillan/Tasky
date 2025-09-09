@@ -32,6 +32,8 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const lightTheme = createTheme({
   palette: {
@@ -79,7 +81,6 @@ const AppContent: React.FC = () => {
   const { user, logout } = useAuth();
   const location = useLocation(); 
 
-  
   const showFooter = location.pathname === "/";
 
   return (
@@ -182,6 +183,8 @@ const AppContent: React.FC = () => {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/tasks" element={<AllTasks />} />
             <Route path="/new-task" element={<NewTask />} />
             <Route path="/completed-tasks" element={<CompletedTasks />} />
@@ -197,9 +200,9 @@ const AppContent: React.FC = () => {
             sx={{
               py: 4,
               px: 2,
-             backgroundColor: "#0f172a",
+              backgroundColor: "#0f172a",
             
-             color: "#FFF",
+              color: "#FFF",
               textAlign: "center",
               borderTopLeftRadius: 16,
               borderTopRightRadius: 16,
