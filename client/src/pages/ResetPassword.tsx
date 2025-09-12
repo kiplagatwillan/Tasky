@@ -46,7 +46,7 @@ const ResetPassword: React.FC = () => {
         { token, newPassword },
       );
       setSuccess(response.data.message);
-      // Redirect to login after a short delay
+     
       setTimeout(() => navigate("/login"), 3000);
     } catch (err: any) {
       console.error("Reset password error:", err);
