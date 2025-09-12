@@ -70,7 +70,7 @@ const checkPasswordStrength = (password: string): string | null => {
   }
   return null;
 };
-
+//update user route
 router.post("/register", async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
   if (!firstName || !lastName || !username || !email || !password) {
@@ -119,7 +119,7 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
+// login route
 router.post("/login", async (req, res) => {
   const { emailOrUsername, password } = req.body;
   if (!emailOrUsername || !password) {
